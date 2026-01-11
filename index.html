@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Labor Prep">
+    <meta name="theme-color" content="#000000">
+    <title>Labor Workout Prep</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #1a1a1a;
+            color: #f5f5f5;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding-bottom: 30px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            padding: 20px 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid #3a3a3a;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .header .subtitle {
+            font-size: 14px;
+            color: #7fcdcd;
+            font-weight: 600;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Motivation Banner */
+        .motivation-banner {
+            background: linear-gradient(135deg, #7fcdcd 0%, #5fb3b3 100%);
+            color: #1a1a1a;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(127, 205, 205, 0.3);
+        }
+
+        .motivation-banner h2 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .motivation-banner p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Streak Display */
+        .streak-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .streak-card {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #3a3a3a;
+        }
+
+        .streak-value {
+            font-size: 42px;
+            font-weight: 700;
+            color: #7fcdcd;
+        }
+
+        .streak-label {
+            font-size: 12px;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        /* Today's Workout */
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .day-type {
+            font-size: 12px;
+            background: rgba(127, 205, 205, 0.2);
+            color: #7fcdcd;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* Workout Card */
+        .workout-card {
+            background: #2a2a2a;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border: 1px solid #3a3a3a;
+        }
+
+        .workout-header {
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .workout-header:hover {
+            background: #333;
+        }
+
+        .workout-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .workout-checkbox {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #7fcdcd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .workout-checkbox.checked {
+            background: #7fcdcd;
+        }
+
+        .workout-checkbox.checked::after {
+            content: "✓";
+            color: #1a1a1a;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .workout-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .workout-duration {
+            font-size: 14px;
+            color: #7fcdcd;
+            font-weight: 600;
+        }
+
+        .workout-details {
+            padding: 0 20px 20px;
+            color: #d0d0d0;
+            line-height: 1.6;
+            font-size: 15px;
+            display: none;
+        }
+
+        .workout-card.expanded .workout-details {
+            display: block;
+        }
+
+        .workout-option {
+            background: #1a1a1a;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #7fcdcd;
+        }
+
+        .workout-option strong {
+            color: #7fcdcd;
+        }
+
+        .exercise-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        .exercise-list li {
+            padding: 8px 0 8px 24px;
+            position: relative;
+        }
+
+        .exercise-list li::before {
+            content: "•";
+            position: absolute;
+            left: 8px;
+            color: #7fcdcd;
+        }
+
+        /* Complete Day Button */
+        .complete-button {
+            width: 100%;
+            padding: 20px;
+            font-size: 20px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+
+        .complete-button.active {
+            background: linear-gradient(135deg, #5fb3b3 0%, #7fcdcd 100%);
+            color: #1a1a1a;
+            box-shadow: 0 8px 20px rgba(127, 205, 205, 0.3);
+        }
+
+        .complete-button.active:active {
+            transform: scale(0.98);
+        }
+
+        .complete-button.disabled {
+            background: #3a3a3a;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .complete-button.done {
+            background: #2a2a2a;
+            color: #7fcdcd;
+            border: 2px solid #7fcdcd;
+        }
+
+        /* Calendar */
+        .calendar-section {
+            margin-top: 30px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-nav button {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            color: #f5f5f5;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-day-label {
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            padding-bottom: 8px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 600;
+            background: #2a2a2a;
+            color: #888;
+            position: relative;
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.3;
+        }
+
+        .calendar-day.today {
+            border: 2px solid #7fcdcd;
+            color: #f5f5f5;
+        }
+
+        .calendar-day.completed {
+            background: #7fcdcd;
+            color: #1a1a1a;
+        }
+
+        .calendar-day.rest {
+            background: #3a3a3a;
+            color: #888;
+        }
+
+        .calendar-day.rest.completed::after {
+            content: "R";
+            font-size: 10px;
+        }
+
+        /* Weekly Progress */
+        .week-progress {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid #3a3a3a;
+        }
+
+        .week-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .week-progress-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .week-progress-count {
+            font-size: 14px;
+            color: #7fcdcd;
+            font-weight: 600;
+        }
+
+        .week-dots {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .week-dot {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .week-dot-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #3a3a3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .week-dot-circle.completed {
+            background: #7fcdcd;
+            color: #1a1a1a;
+        }
+
+        .week-dot-circle.today {
+            border: 2px solid #7fcdcd;
+            background: #2a2a2a;
+            color: #7fcdcd;
+        }
+
+        .week-dot-circle.today.completed {
+            background: #7fcdcd;
+            color: #1a1a1a;
+        }
+
+        .week-dot-label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        /* Info Cards */
+        .info-card {
+            background: #252525;
+            border: 1px solid #3a3a3a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .info-card h3 {
+            color: #7fcdcd;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .info-card p {
+            color: #d0d0d0;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+            color: #d0d0d0;
+            font-size: 14px;
+        }
+
+        .info-card li {
+            padding: 6px 0 6px 20px;
+            position: relative;
+        }
+
+        .info-card li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #7fcdcd;
+        }
+
+        /* Reset Button */
+        .reset-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .reset-button {
+            background: transparent;
+            border: 1px solid #c97064;
+            color: #c97064;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .celebrate {
+            animation: celebrate 0.5s ease-out;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #3a3a3a;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Labor Workout Prep</h1>
+        <div class="subtitle">Ready to Endure Labor</div>
+    </div>
+
+    <div class="content">
+        <!-- Motivation Banner -->
+        <div class="motivation-banner">
+            <h2>Building Stamina for Birth</h2>
+            <p>20 minutes a day. Consistency beats intensity.</p>
+        </div>
+
+        <!-- Streak Display -->
+        <div class="streak-container">
+            <div class="streak-card">
+                <div class="streak-value" id="currentStreak">0</div>
+                <div class="streak-label">Day Streak</div>
+            </div>
+            <div class="streak-card">
+                <div class="streak-value" id="totalDays">0</div>
+                <div class="streak-label">Total Days</div>
+            </div>
+        </div>
+
+        <!-- Weekly Progress -->
+        <div class="week-progress">
+            <div class="week-progress-header">
+                <div class="week-progress-title">This Week</div>
+                <div class="week-progress-count" id="weekCount">0/7 days</div>
+            </div>
+            <div class="week-dots" id="weekDots">
+                <!-- Generated by JS -->
+            </div>
+        </div>
+
+        <!-- Today's Workout -->
+        <div class="section-title">
+            Today's Workout
+            <span class="day-type" id="dayType">Full Day</span>
+        </div>
+
+        <!-- Workout Cards -->
+        <div id="workoutCards">
+            <!-- Movement -->
+            <div class="workout-card" id="card-movement">
+                <div class="workout-header" onclick="toggleCard('movement')">
+                    <div class="workout-info">
+                        <div class="workout-checkbox" id="check-movement" onclick="event.stopPropagation(); toggleCheck('movement')"></div>
+                        <div>
+                            <div class="workout-title">Movement</div>
+                            <div class="workout-duration">8-10 min</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="workout-details">
+                    <p style="margin-bottom: 12px;">Choose one. Rotate freely.</p>
+                    <div class="workout-option">
+                        <strong>Hilly Walk</strong><br>
+                        Moderate effort. Able to talk in short sentences. This mimics labor heart-rate spikes.
+                    </div>
+                    <div class="workout-option">
+                        <strong>Bike Trainer</strong><br>
+                        Easy-moderate spin. No intervals. Upright posture. Cadence over resistance.
+                    </div>
+                    <p style="margin-top: 12px; font-style: italic; color: #888;">Why: Labor is aerobic. Comfort under sustained effort matters.</p>
+                </div>
+            </div>
+
+            <!-- Strength -->
+            <div class="workout-card" id="card-strength">
+                <div class="workout-header" onclick="toggleCard('strength')">
+                    <div class="workout-info">
+                        <div class="workout-checkbox" id="check-strength" onclick="event.stopPropagation(); toggleCheck('strength')"></div>
+                        <div>
+                            <div class="workout-title">Pelvic + Strength</div>
+                            <div class="workout-duration">6-8 min</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="workout-details">
+                    <div class="workout-option">
+                        <strong>Sculpt Society Prenatal</strong><br>
+                        Lower body / glutes / deep core focused. Stop before fatigue.
+                    </div>
+                    <p style="margin: 12px 0;"><strong>OR do this circuit once:</strong></p>
+                    <ul class="exercise-list">
+                        <li>Bodyweight squats or supported squats × 10</li>
+                        <li>Glute bridges × 10</li>
+                        <li>Side-lying clamshells × 10/side</li>
+                        <li>Standing banded rows × 10</li>
+                    </ul>
+                    <p style="font-style: italic; color: #888;">Why: Upright labor positions demand glute endurance and postural strength.</p>
+                </div>
+            </div>
+
+            <!-- Birth Prep -->
+            <div class="workout-card" id="card-birthprep">
+                <div class="workout-header" onclick="toggleCard('birthprep')">
+                    <div class="workout-info">
+                        <div class="workout-checkbox" id="check-birthprep" onclick="event.stopPropagation(); toggleCheck('birthprep')"></div>
+                        <div>
+                            <div class="workout-title">Birth-Specific Prep</div>
+                            <div class="workout-duration">4-6 min</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="workout-details">
+                    <p style="margin-bottom: 16px;"><strong>On the exercise ball:</strong></p>
+
+                    <div class="workout-option">
+                        <strong>Hip Circles – 1 min each direction</strong><br>
+                        <span style="color: #a0a0a0;">Sit on ball, feet flat and wide. Make big slow circles with your hips like you're stirring a pot. Go clockwise for 1 min, then counter-clockwise. Keep your upper body relatively still – movement comes from hips/pelvis.</span>
+                    </div>
+
+                    <div class="workout-option">
+                        <strong>Pelvic Tilts – 1-2 min</strong><br>
+                        <span style="color: #a0a0a0;">Sit tall on ball. Tilt pelvis forward (belly out, slight arch in back), then tilt back (tuck tailbone under, round lower back). Move slowly and smoothly. Think "cat-cow" but seated. This mobilizes the lower spine and pelvis.</span>
+                    </div>
+
+                    <div class="workout-option">
+                        <strong>Gentle Bounce or Figure-8s – 1-2 min</strong><br>
+                        <span style="color: #a0a0a0;">Light bouncing: small gentle bounces, keeping feet grounded. OR trace a figure-8 pattern with your hips (combine circles going in opposite directions). Both open the pelvis and encourage baby to descend.</span>
+                    </div>
+
+                    <p style="margin: 16px 0 12px;"><strong>Then off the ball:</strong></p>
+
+                    <div class="workout-option">
+                        <strong>Deep Squat Hold – 30-60 sec</strong><br>
+                        <span style="color: #a0a0a0;">Feet wider than hips, toes turned out. Lower down into a deep squat. If heels lift, put a rolled towel or yoga mat under them. Hold onto furniture or door frame if needed for balance. Let your belly hang between your thighs. Breathe. This opens the pelvis 20-30% more than standing.</span>
+                    </div>
+
+                    <div class="workout-option">
+                        <strong>Belly Breathing – 1-2 min</strong><br>
+                        <span style="color: #a0a0a0;">Sit or lie comfortably. Breathe in slowly through nose (4 counts), letting belly AND ribs expand outward. Exhale slowly through mouth (6 counts), letting everything soften. Practice relaxing your jaw, shoulders, and pelvic floor on the exhale. This is the breathing you'll use during labor.</span>
+                    </div>
+
+                    <p style="margin-top: 16px; font-style: italic; color: #888;">Why: Improves pelvic mobility, fetal positioning tolerance, and your ability to relax while uncomfortable. That skill matters more than strength.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Light Day Workouts (hidden by default) -->
+        <div id="lightDayCards" style="display: none;">
+            <div class="workout-card" id="card-lightwalk">
+                <div class="workout-header" onclick="toggleCard('lightwalk')">
+                    <div class="workout-info">
+                        <div class="workout-checkbox" id="check-lightwalk" onclick="event.stopPropagation(); toggleCheck('lightwalk')"></div>
+                        <div>
+                            <div class="workout-title">Easy Walk or Bike</div>
+                            <div class="workout-duration">10-15 min</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="workout-details">
+                    <p>Easy effort. No pushing. Just move your body gently.</p>
+                </div>
+            </div>
+
+            <div class="workout-card" id="card-lightball">
+                <div class="workout-header" onclick="toggleCard('lightball')">
+                    <div class="workout-info">
+                        <div class="workout-checkbox" id="check-lightball" onclick="event.stopPropagation(); toggleCheck('lightball')"></div>
+                        <div>
+                            <div class="workout-title">Ball Work + Breathing</div>
+                            <div class="workout-duration">5 min</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="workout-details">
+                    <div class="workout-option">
+                        <strong>Hip Circles – 1 min each direction</strong><br>
+                        <span style="color: #a0a0a0;">Sit on ball, feet flat and wide. Make big slow circles with your hips like you're stirring a pot. Clockwise, then counter-clockwise.</span>
+                    </div>
+
+                    <div class="workout-option">
+                        <strong>Gentle Bounce – 1-2 min</strong><br>
+                        <span style="color: #a0a0a0;">Small gentle bounces, keeping feet grounded. Let gravity do the work. This opens the pelvis and encourages baby to descend.</span>
+                    </div>
+
+                    <div class="workout-option">
+                        <strong>Belly Breathing – 1-2 min</strong><br>
+                        <span style="color: #a0a0a0;">Stay seated on ball or move to a comfortable position. Breathe in through nose (4 counts), belly and ribs expand. Exhale through mouth (6 counts), let everything soften. Relax jaw, shoulders, pelvic floor on exhale.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Complete Day Button -->
+        <button class="complete-button disabled" id="completeButton" onclick="completeDay()">
+            Complete Today's Workout
+        </button>
+
+        <!-- Calendar -->
+        <div class="calendar-section">
+            <div class="calendar-header">
+                <div class="calendar-title" id="calendarMonth">January 2026</div>
+                <div class="calendar-nav">
+                    <button onclick="prevMonth()">←</button>
+                    <button onclick="nextMonth()">→</button>
+                </div>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Generated by JS -->
+            </div>
+        </div>
+
+        <!-- Info Cards -->
+        <div style="margin-top: 30px;">
+            <div class="info-card">
+                <h3>What This Prepares You For</h3>
+                <ul>
+                    <li>Tolerating upright labor longer</li>
+                    <li>Faster recovery between contractions</li>
+                    <li>Easier position changes</li>
+                    <li>Lower perceived exertion during active labor</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h3>What to Avoid</h3>
+                <ul>
+                    <li>HIIT, "burn," or chasing soreness</li>
+                    <li>Long workouts "while you still can"</li>
+                    <li>New strength goals</li>
+                    <li>Anything that spikes pelvic pain or exhaustion</li>
+                </ul>
+                <p style="margin-top: 12px; font-style: italic;">Fatigue close to term increases discomfort without benefit.</p>
+            </div>
+
+            <div class="info-card">
+                <h3>The Rule</h3>
+                <p>If you miss a day, do nothing to "make it up." Consistency beats volume. Finish feeling capable, not depleted.</p>
+            </div>
+        </div>
+
+        <!-- Reset -->
+        <div class="reset-section">
+            <button class="reset-button" onclick="resetData()">Reset All Data</button>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let completedDates = JSON.parse(localStorage.getItem('workoutDates') || '[]');
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let checkedItems = {
+            movement: false,
+            strength: false,
+            birthprep: false,
+            lightwalk: false,
+            lightball: false
+        };
+
+        // Initialize
+        window.addEventListener('load', () => {
+            updateStats();
+            updateWeekProgress();
+            renderCalendar();
+            checkTodayCompleted();
+            setDayType();
+        });
+
+        // Determine if today is a light day (weekends)
+        function isLightDay() {
+            const day = new Date().getDay();
+            return day === 0 || day === 6; // Sunday or Saturday
+        }
+
+        function setDayType() {
+            const dayType = document.getElementById('dayType');
+            const fullCards = document.getElementById('workoutCards');
+            const lightCards = document.getElementById('lightDayCards');
+
+            if (isLightDay()) {
+                dayType.textContent = 'Light Day';
+                fullCards.style.display = 'none';
+                lightCards.style.display = 'block';
+            } else {
+                dayType.textContent = 'Full Day';
+                fullCards.style.display = 'block';
+                lightCards.style.display = 'none';
+            }
+        }
+
+        // Toggle workout card expand
+        function toggleCard(id) {
+            const card = document.getElementById('card-' + id);
+            card.classList.toggle('expanded');
+        }
+
+        // Toggle checkbox
+        function toggleCheck(id) {
+            checkedItems[id] = !checkedItems[id];
+            const checkbox = document.getElementById('check-' + id);
+            checkbox.classList.toggle('checked', checkedItems[id]);
+            updateCompleteButton();
+        }
+
+        // Update complete button state
+        function updateCompleteButton() {
+            const button = document.getElementById('completeButton');
+            const today = getTodayString();
+
+            if (completedDates.includes(today)) {
+                button.className = 'complete-button done';
+                button.textContent = "Today Complete ✓";
+                return;
+            }
+
+            let allChecked;
+            if (isLightDay()) {
+                allChecked = checkedItems.lightwalk && checkedItems.lightball;
+            } else {
+                allChecked = checkedItems.movement && checkedItems.strength && checkedItems.birthprep;
+            }
+
+            if (allChecked) {
+                button.className = 'complete-button active';
+                button.textContent = 'Complete Today\'s Workout';
+            } else {
+                button.className = 'complete-button disabled';
+                button.textContent = 'Check All Items to Complete';
+            }
+        }
+
+        // Complete day
+        function completeDay() {
+            const today = getTodayString();
+            if (completedDates.includes(today)) return;
+
+            let allChecked;
+            if (isLightDay()) {
+                allChecked = checkedItems.lightwalk && checkedItems.lightball;
+            } else {
+                allChecked = checkedItems.movement && checkedItems.strength && checkedItems.birthprep;
+            }
+
+            if (!allChecked) return;
+
+            completedDates.push(today);
+            localStorage.setItem('workoutDates', JSON.stringify(completedDates));
+
+            // Update UI
+            updateStats();
+            updateWeekProgress();
+            renderCalendar();
+            updateCompleteButton();
+
+            // Celebrate
+            const streakCard = document.querySelector('.streak-card');
+            streakCard.classList.add('celebrate');
+            setTimeout(() => streakCard.classList.remove('celebrate'), 500);
+        }
+
+        // Check if today is already completed
+        function checkTodayCompleted() {
+            const today = getTodayString();
+            if (completedDates.includes(today)) {
+                // Mark all items as checked
+                if (isLightDay()) {
+                    checkedItems.lightwalk = true;
+                    checkedItems.lightball = true;
+                    document.getElementById('check-lightwalk').classList.add('checked');
+                    document.getElementById('check-lightball').classList.add('checked');
+                } else {
+                    checkedItems.movement = true;
+                    checkedItems.strength = true;
+                    checkedItems.birthprep = true;
+                    document.getElementById('check-movement').classList.add('checked');
+                    document.getElementById('check-strength').classList.add('checked');
+                    document.getElementById('check-birthprep').classList.add('checked');
+                }
+            }
+            updateCompleteButton();
+        }
+
+        // Get today as string
+        function getTodayString() {
+            const today = new Date();
+            return today.toISOString().split('T')[0];
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('totalDays').textContent = completedDates.length;
+            document.getElementById('currentStreak').textContent = calculateStreak();
+        }
+
+        // Calculate streak
+        function calculateStreak() {
+            if (completedDates.length === 0) return 0;
+
+            const sorted = [...completedDates].sort().reverse();
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            let streak = 0;
+            let checkDate = new Date(today);
+
+            // Check if today is completed
+            const todayStr = getTodayString();
+            if (!sorted.includes(todayStr)) {
+                // Check if yesterday was completed (streak still valid if today not done yet)
+                checkDate.setDate(checkDate.getDate() - 1);
+            }
+
+            while (true) {
+                const dateStr = checkDate.toISOString().split('T')[0];
+                if (sorted.includes(dateStr)) {
+                    streak++;
+                    checkDate.setDate(checkDate.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+
+            return streak;
+        }
+
+        // Update week progress
+        function updateWeekProgress() {
+            const weekDots = document.getElementById('weekDots');
+            const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            const today = new Date();
+            const currentDayOfWeek = today.getDay();
+
+            // Get start of week (Sunday)
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - currentDayOfWeek);
+            startOfWeek.setHours(0, 0, 0, 0);
+
+            let weekCompleted = 0;
+            let html = '';
+
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(startOfWeek);
+                date.setDate(startOfWeek.getDate() + i);
+                const dateStr = date.toISOString().split('T')[0];
+                const isToday = i === currentDayOfWeek;
+                const isCompleted = completedDates.includes(dateStr);
+
+                if (isCompleted) weekCompleted++;
+
+                let circleClass = 'week-dot-circle';
+                if (isCompleted) circleClass += ' completed';
+                if (isToday) circleClass += ' today';
+
+                html += `
+                    <div class="week-dot">
+                        <div class="${circleClass}">${isCompleted ? '✓' : ''}</div>
+                        <div class="week-dot-label">${days[i]}</div>
+                    </div>
+                `;
+            }
+
+            weekDots.innerHTML = html;
+            document.getElementById('weekCount').textContent = `${weekCompleted}/7 days`;
+        }
+
+        // Calendar functions
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const monthLabel = document.getElementById('calendarMonth');
+
+            const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                           'July', 'August', 'September', 'October', 'November', 'December'];
+            monthLabel.textContent = `${months[currentMonth]} ${currentYear}`;
+
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+
+            const today = new Date();
+            const todayStr = getTodayString();
+
+            let html = '';
+
+            // Day labels
+            const dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            dayLabels.forEach(d => {
+                html += `<div class="calendar-day-label">${d}</div>`;
+            });
+
+            // Previous month days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const day = daysInPrevMonth - i;
+                html += `<div class="calendar-day other-month">${day}</div>`;
+            }
+
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(currentYear, currentMonth, day);
+                const dateStr = date.toISOString().split('T')[0];
+                const isToday = dateStr === todayStr;
+                const isCompleted = completedDates.includes(dateStr);
+                const dayOfWeek = date.getDay();
+                const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+                let classes = 'calendar-day';
+                if (isToday) classes += ' today';
+                if (isCompleted) classes += ' completed';
+
+                html += `<div class="${classes}">${day}</div>`;
+            }
+
+            // Next month days
+            const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+            const remaining = totalCells - (firstDay + daysInMonth);
+            for (let day = 1; day <= remaining; day++) {
+                html += `<div class="calendar-day other-month">${day}</div>`;
+            }
+
+            grid.innerHTML = html;
+        }
+
+        function prevMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        }
+
+        // Reset data
+        function resetData() {
+            if (confirm('Reset all workout data? This cannot be undone.')) {
+                completedDates = [];
+                localStorage.removeItem('workoutDates');
+                checkedItems = {
+                    movement: false,
+                    strength: false,
+                    birthprep: false,
+                    lightwalk: false,
+                    lightball: false
+                };
+
+                // Uncheck all checkboxes
+                document.querySelectorAll('.workout-checkbox').forEach(cb => {
+                    cb.classList.remove('checked');
+                });
+
+                updateStats();
+                updateWeekProgress();
+                renderCalendar();
+                updateCompleteButton();
+            }
+        }
+
+        // Prevent zoom on double-tap (iOS)
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (event) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+
+</body>
+</html>
